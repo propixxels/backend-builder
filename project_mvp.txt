@@ -1,0 +1,87 @@
+
+
+## Project Brief: The Visual Backend Architect
+
+### 1. Project Vision & Executive Summary
+
+To create a **visual, "backend-first" web application** that allows non-technical clients and developers to collaboratively design complex, production-ready database schemas and business logic.
+
+This application is **not** a UI/UX design tool. Its sole purpose is to serve as a "visual IDE" for backend architecture. It will empower users to build an unambiguous blueprint of their data structures, relationships, business rules, and security policies.
+
+The final output is not a static diagram, but a series of exportable, machine-readable files (starting with a master JSON) that can be fed directly to AI models or developer tools to auto-generate boilerplate code, database migrations, and API schemas.
+
+### 2. The Problem & Market Opportunity
+
+This tool solves three of the most expensive and persistent problems in software development:
+
+> * **The "Lost in Translation" Gap:** The-disconnect between a client's vision and a developer's technical implementation. This tool bridges the gap by providing a common, visual language that is simple enough for a client but precise enough for an engineer.
+> * **Tedious, Error-Prone Scaffolding:** Developers spend days of "Day 0" work manually writing boilerplate code for models, data types, relationships, and basic API endpoints. This is slow, boring, and a common source of bugs.
+> * **The "No-Code Trap":** Existing no-code tools tightly couple the database and the UI, making it nearly impossible to export the logic and scale to a professional, custom tech stack.
+
+### 3. Target Audience
+
+1.  **Non-Technical Stakeholders** (Clients, Founders, Product Managers): Need to define business logic and requirements without writing code.
+2.  **Developers** (Full-Stack, Backend, "Vibe Coders"): Need to rapidly scaffold a project, understand client requirements, and eliminate boilerplate.
+3.  **AI Development Agents:** The primary consumer of the master JSON output, using it to build the software.
+
+### 4. Core Components & Functionality
+
+#### 4.1. The Sidebar: The Global Library
+
+This is the central "source of truth" for all project data. It consists of two parts. Crucially, this library is **global**: changing a master item here will update every instance of it on the canvas.
+
+* **Data Type Toolbox:** A static list of "atomic" data types for building.
+    * **Examples:** Text, Email, Phone, Number, Currency, Date, Time, Date-Time, Boolean, Project ID, etc.
+* **Project Library:** The user's collection of custom "molecules" built from the atoms.
+    * **Data Fields:** Reusable, named fields (e.g., a "First Name" field created from the "Text" type).
+    * **Data Models:** Reusable, named models (e.g., a "Customer" model) that act as containers for fields.
+
+#### 4.2. The Canvas: The Visual Blueprint
+
+An infinite, free-form canvas for visual design and organization.
+
+* **Drag-and-Drop:** Users drag **Data Models** (e.g., "Customer," "Order") from their Library onto the canvas as distinct blocks.
+* **Visual Grouping:** A simple tool to draw and label boxes (e.g., "User Auth," "E-commerce") to visually organize the canvas. These groups are for user convenience only and **will not** be included in the JSON export.
+
+#### 4.3. Data Modeling (Defining the "Nouns")
+
+This is how users define their data structures within the Project Library.
+
+* **Creating Models:** A user creates a "Customer" model. They then drag "Data Fields" (like "First Name," "Email," "Phone") into it.
+* **Nesting Models (Embedded Data):** Users must be able to drag an entire "Data Model" (e.g., "Address") *inside* another "Data Model" (e.g., "Customer") to represent nested JSON or embedded documents.
+* **Business Rules:** Every Data Field must have an optional "Rules" tab to add granular constraints.
+    * **Examples:** `This field is Required`, `This field must be Unique`, `Value must be > 0`, `Value must be < 100`, etc.
+
+#### 4.4. Relationship Modeling (Connecting the "Nouns")
+
+This is how users define relationships *between* models on the canvas.
+
+* **Visual Lines:** Users draw an arrow between two `Data Model` blocks (e.g., from "Customer" to "Order").
+* **Cardinality:** Clicking the arrow/line will toggle a label on it, cycling through the three core relationship types:
+    * **`1:1`** (One-to-One)
+    * **`1:M`** (One-to-Many)
+    * **`M:M`** (Many-to-Many)
+
+#### 4.5. Logic & Security (Defining the "Verbs" and "Rules")
+
+This is the advanced feature set that provides complete clarity to the AI. Every `Data Model` will have these additional tabs.
+
+* **Actions (CRUD):** A simple checklist defining what can be done to this data.
+    * [✅] `Create`
+    * [✅] `Read`
+    * [✅] `Update`
+    * [❌] `Delete` (This tells the AI not to create a "delete" endpoint).
+* **Row-Level Security (RLS):** A plain-English rule builder for defining data access policies.
+    * **`ON READ:`** "A `User` can only `Read` an `Order` IF `Order.customerID` is equal to the `User.id`."
+    * **`ON UPDATE:`** "Only an `Admin` can `Update` an `Order`."
+
+### 5. The Key Deliverable: The "Export As..." Feature
+
+This is the primary output and "killer feature" of the application. The "Export" button will have a dropdown menu to generate code-ready files based on the visual blueprint.
+
+* **`Export as: JSON Blueprint (Master File)`:** The default. A comprehensive `.json` file containing all models, fields, types, rules, relationships, actions, and security policies. This is the file to be fed to an AI.
+* **`Export as: Prisma Schema`** (Generates a `schema.prisma` file)
+* **`Export as: TypeScript Interfaces`** (Generates `types.ts` files)
+* **`Export as: Mongoose Schemas`** (Generates `*.js` files for a MERN stack)
+* **`Export as: Django Models`** (Generates a `models.py` file)
+* **`Export as: SQL Create Tables`** (Generates a `.sql` file)
